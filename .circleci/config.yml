@@ -33,6 +33,14 @@ jobs:
       - run:
           name: "print_world"
           command: "echo World"
+  test-env-var:
+    docker:
+      - image: cimg/node:14.19.1
+    steps:
+      - checkout
+      - run:
+          name: "a command the prints the env-var that is part of our project"
+          command: "echo $PERSONAL_VAR"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -46,3 +54,6 @@ workflows:
       - print-world:
           requires:
             - print-hello
+  env-var-workflow:
+    jobs:
+      - test-env-var
