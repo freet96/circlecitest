@@ -32,7 +32,13 @@ jobs:
       - checkout
       - run:
           name: "print_world"
-          command: "echo World"
+          command: echo "Hello World" ~>/output.txt
+      - persist_to_workspace:
+          root: ~/
+          path: 
+            - output.txt
+  
+  
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
