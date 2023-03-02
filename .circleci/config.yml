@@ -25,7 +25,8 @@ jobs:
       - run:
           name: "print_hello"
           command: "echo Hello"
-  print-world:
+
+  export-hello-world-to-output: # writes hello world to output.txt on the main root path
     docker:
       - image: cimg/node:14.19.1
     steps:
@@ -37,7 +38,14 @@ jobs:
           root: ~/
           path: 
             - output.txt
-  
+
+  print_output_file:
+    docker:
+      - image: cimg/node:14.19.1
+    steps:
+      - attach_workspace:
+          at: ~/                     #attach to the root directory
+      - run: cat ~/output.txt  
   
 
 # Invoke jobs via workflows
@@ -46,9 +54,10 @@ workflows:
   say-hello-workflow:
     jobs:
       - say-hello
-  say-hello-and-world-workflow: #Name of the workflow
-    jobs:   #list of jobs in order
-      - print-hello
-      - print-world:
+
+  say-hello-world-workflow:      #Name of the workflow
+    jobs:                        #list of jobs in order
+      - export-hello-world-to-output
+      - print_output_file:
           requires:
-            - print-hello
+            - export-hello-world-to-output
